@@ -1,0 +1,26 @@
+.pagination-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .pagination li {
+    margin-right: 5px;
+  }
+  
+  .pagination li button {
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+  }
+  
+  .pagination li.active button {
+    font-weight: bold;
+  }
+  

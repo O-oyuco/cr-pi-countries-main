@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Century Gothic', sans-serif;
+  }
+.detail-container-card {
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 10px;
+    box-shadow: 0 0 15px rgb(221, 255, 0);
+    background-color: #25181f;
+    border-radius: 10px 70px  ;
+    text-align: center;
+    margin-top: 29px; 
+    font-family: "Nothing";
+    text-shadow: 4px 4px 6px rgb(0, 0, 0);
+    z-index: 1;
+  }
+.detail-container-card:hover{
+  box-shadow: 0 0 15px red;
+}
+  
+  .detail-card-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+  }
+  
+  .detail-card img {
+    margin-top: 10px; 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: 1;
+  }
+  
+  .detail-card p {
+    margin-bottom: 8px; 
+    z-index: 1;
+  }
+  
+  .detail-container img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 15px;
+    z-index: 1;
+  }
+  
+  .detail-container h1 {
+    margin-bottom: 10px;
+    font-family: 'Century Gothic', sans-serif; 
+    text-shadow: none;
+    background-color: #25181f00;
+    z-index: 1;
+  }
+  
+  .detail-container p {
+    margin: 8px 0;
+  }
+  .detail-card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: -2;
+    /* filter: grayscale(); */
+
+  }
+  
+h1{
+  color: aliceblue;
+}
+p{
+  color: rgb(255, 255, 255);
+}
