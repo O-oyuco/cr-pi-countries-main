@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import "./Card.css";
 
-function CardCountries({ id, name, image }) {
+function CardCountries({ id, name, image, continent }) {
 
 const location = useLocation();
 
@@ -15,6 +15,8 @@ const location = useLocation();
       </div>
       <div className="card-overlay">
         <h3 className="card-name">{name}</h3>
+        <h3 className="continente-name">{continent}</h3>
+
       </div>
       
     </div>

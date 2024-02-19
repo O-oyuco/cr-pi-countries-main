@@ -24,5 +24,9 @@ module.exports = (sequelize) => {
             type: DataTypes.ENUM('Invierno', 'Primavera','Verano', 'Otoño'),
             allowNull:false
         },
+        imageUrl:{
+            type: DataTypes.STRING, // Cambiar al tipo de datos adecuado para la URL de la imagen
+            allowNull: false // Puedes establecerlo como true si la foto es opcional
+        },
     });
 };

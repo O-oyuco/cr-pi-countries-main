@@ -1,58 +1,53 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cards from "../cards/Cards";
-import "./Home.css"; // Importar el archivo CSS
+import "./Home.css";
 import SearchBar from "../searchBar/SearchBar";
 import { connect } from "react-redux";
-import { countriesSuccess } from "../../ridux/actions";
+import { countriesSuccess, filterCountries, sortCountries } from "../../ridux/actions";
 import CreateActivityForm from "../activityForm/ActivityForm";
-import Filters from "../filter/Filter";
 
 function Home(props) {
+  const URL_COUNTRIES = "http://localhost:3001/countries";
   const URL_COUNTRIES_NAME = "http://localhost:3001/countries/name/?name=";
+  const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
-  const [filterValor, setFilterValor] = useState("All")
   const cardsPerPage = 10;
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setFilteredCountries(props.filteredCountries);
-  }, [props.filteredCountries]);
-
-  const onSearch = async (name) => {
-    if (filterValor === "All"){ 
+    const fetchData = async () => {
       try {
-        const { data } = await axios.get(`${URL_COUNTRIES_NAME}${name}`);
-        if (data.length > 0) {
-          setFilteredCountries(data);
-          setCurrentPage(1); // Establecer el índice de la página en 1 al realizar la búsqueda
-        } else {
-          alert("No hay países con ese nombre.");
-        }
-      } catch (err) {
-        alert(err.message);
+        const response = await axios.get(URL_COUNTRIES);
+        props.countriesSuccess(response.data);
+        setFilteredCountries(response.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
       }
-    } else {
-      const filterCountries = props.filteredCountries.filter(country =>
-        country.name.toLowerCase().includes(name.toLowerCase())
-      );
-      if (filterCountries.length > 0) {
-        setFilteredCountries(filterCountries);
-        setCurrentPage(1);
+    };
+    fetchData();
+  }, []);
+
+  
+  const onSearch = async (name) => {
+    try {
+      const { data } = await axios.get(`${URL_COUNTRIES_NAME}${name}`);
+      if (data.length > 0) {
+        setFilteredCountries(data);
+        setCurrentPage(1); // Establecer el índice de la página en 1 al realizar la búsqueda
       } else {
-        alert('No hay países con ese nombre');
-        setFilteredCountries(props.filteredCountries);
+        alert("No hay países con ese nombre.");
       }
+    } catch (err) {
+      alert(err.message);
     }
   };
-  
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
-    const filtered = props.filteredCountries.filter((country) =>
+    const filtered = countries.filter((country) =>
       country.name.toLowerCase().startsWith(event.target.value.toLowerCase())
     );
     setFilteredCountries(filtered);
@@ -76,25 +71,20 @@ function Home(props) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const handleFilterChange = (e) => {
-    setFilterValor(e.target.value) 
+
+  const handleSort = (sortBy) => {
+    props.sortCountries(sortBy);
   };
 
-
-  // Calcular el índice de la primera y última tarjeta de la página actual
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  // Obtener las tarjetas que se mostrarán en la página actual
-  const currentCards = filteredCountries.slice(indexOfFirstCard, indexOfLastCard);
+  const currentCards = props.filteredCountries.slice(indexOfFirstCard, indexOfLastCard);
 
   return (
     <div>
-      <Filters handleFilterChange= {handleFilterChange} />
       <SearchBar onSearch={onSearch} onChange={handleSearch} value={searchQuery} />
       <Cards countries={currentCards} />
-      {/* Botón para abrir el modal */}
       <button onClick={openModal}>Agregar Actividad</button>
-      {/* Modal */}
       {isModalOpen && (
         <div className="modal" onClick={handleModalClick}>
           <div className="modal-content">
@@ -102,14 +92,13 @@ function Home(props) {
               &times;
             </span>
             <h2>Agregar Actividad</h2>
-            <CreateActivityForm onCloseModal={handleCloseModal} /> {/* Pasa la función para cerrar el modal */}
+            <CreateActivityForm onCloseModal={handleCloseModal} />
           </div>
         </div>
       )}
-      {/* Paginación */}
       <div className="pagination-container">
         <ul className="pagination">
-          {Array.from({ length: Math.ceil(filteredCountries.length / cardsPerPage) }).map((_, index) => (
+          {Array.from({ length: Math.ceil(props.filteredCountries.length / cardsPerPage) }).map((_, index) => (
             <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
               <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
                 {index + 1}
@@ -118,14 +107,19 @@ function Home(props) {
           ))}
         </ul>
       </div>
+      <div>
+        <button onClick={() => handleSort('name_asc')}>Sort by Name A-Z</button>
+        <button onClick={() => handleSort('name_desc')}>Sort by Name Z-A</button>
+        <button onClick={() => handleSort('population_asc')}>Sort by Population Asc</button>
+        <button onClick={() => handleSort('population_desc')}>Sort by Population Desc</button>
+      </div>
     </div>
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    filteredCountries: state.countries // Corregir el nombre del estado de Redux
-  };
-}
+const mapStateToProps = (state) => ({
+  countries: state.countries,
+  filteredCountries: state.filteredCountries,
+});
 
-export default connect(mapStateToProps, { countriesSuccess })(Home);
+export default connect(mapStateToProps, { countriesSuccess, filterCountries, sortCountries })(Home);

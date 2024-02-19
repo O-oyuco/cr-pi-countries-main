@@ -34,7 +34,7 @@ export default function Detail() {
           {countries.continent && <p>Continente: {countries.continent}</p>}
           {countries.capital && <p>Capital: {countries.capital}</p>}
           {countries.subregion && <p>Subcontinente: {countries.subregion}</p>}
-          {countries.poblacion && <p>Población: {countries.poblacion}</p>}
+          {countries.poblacion && <p>Población: {countries.poblacion} Habitantes</p>}
           {countries.area && <p>Area: {countries.area} km^2</p>}
         </div>
       </div>
