@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { countriesSuccess } from '../../ridux/actions';
 import axios from 'axios';
+import {URL_COUNTRIES} from '../../URL';
 
 function Landing({ countriesSuccess }) {
   const handleIngresarClick = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/countries");
+      const response = await axios.get(URL_COUNTRIES);
       countriesSuccess(response.data);
     } catch (error) {
       console.error("Error fetching countries:", error);

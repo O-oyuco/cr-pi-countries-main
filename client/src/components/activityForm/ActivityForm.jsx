@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./ActivityForm.css"
 import { validateName, validateDifficulty, validateDuration, validateSeason, validateActivityType } from './ValidationForm.js';
-
+import {URL_ACTIVITIES, URL_COUNTRIES} from '../../URL.js';
 const CreateActivityForm = ({ onCloseModal }) => {
+
   const [formData, setFormData] = useState({
     name: '',
     difficult: '',
@@ -30,7 +31,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/countries");
+        const response = await axios.get(URL_COUNTRIES);
         setAvailableCountries(response.data.map(country => country.name.toLowerCase()));
       } catch (error) {
         console.error("Error fetching countries:", error);
@@ -128,7 +129,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
 
     try {
       const { name, difficult, duration, season, countries, imageUrl, activityType } = formData; // Añadimos activityType
-      await axios.post('http://localhost:3001/activities', { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl }); // Pasamos activityType al cuerpo de la solicitud
+      await axios.post(URL_ACTIVITIES, { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl }); // Pasamos activityType al cuerpo de la solicitud
       alert('Actividad turística creada exitosamente');
       setFormData({
         name: '',

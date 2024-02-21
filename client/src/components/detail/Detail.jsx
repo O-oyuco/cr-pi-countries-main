@@ -3,15 +3,14 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Detail.css';
 import { Link } from 'react-router-dom';
+import {URL_COUNTRIES} from '../../URL'
 
 export default function Detail() {
   const { id } = useParams();
   const [countries, setCountries] = useState({});
 
-  const URL = 'http://localhost:3001/countries/';
-
   useEffect(() => {
-    axios(`${URL}${id}`)
+    axios(`${URL_COUNTRIES}/${id}`)
       .then(({ data }) => {
         if (data.name) {
           setCountries(data);

@@ -8,9 +8,9 @@ import { countriesSuccess } from "../../ridux/actions";
 import CreateActivityForm from "../activityForm/ActivityForm";
 import Filters from "../filter/Filter";
 import { Paginate } from "../pagination/Pagination";
+import {URL_COUNTRIES_NAME} from '../../URL'
 
 function Home(props) {
-  const URL_COUNTRIES_NAME = "http://localhost:3001/countries/name/?name=";
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");

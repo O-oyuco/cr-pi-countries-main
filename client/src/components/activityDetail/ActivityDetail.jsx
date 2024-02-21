@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { URL_ACTIVITIES } from '../../URL';
 // import './Detail.css';
 
 export default function ActivityDetail() {
   const { id } = useParams();
   const [activity, setActivity] = useState({});
 
-  const URL = 'http://localhost:3001/activities/';
-
   useEffect(() => {
-    axios(`${URL}${id}`)
+    axios(`${URL_ACTIVITIES}/${id}`)
       .then(({ data }) => {
         if (data.name) {
         setActivity(data);
