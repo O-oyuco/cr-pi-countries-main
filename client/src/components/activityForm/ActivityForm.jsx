@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { validateName, validateDifficulty, validateDuration, validateSeason } from './ValidationForm.js';
+import "./ActivityForm.css"
+import { validateName, validateDifficulty, validateDuration, validateSeason, validateActivityType } from './ValidationForm.js';
 
 const CreateActivityForm = ({ onCloseModal }) => {
   const [formData, setFormData] = useState({
@@ -8,9 +9,10 @@ const CreateActivityForm = ({ onCloseModal }) => {
     difficult: '',
     duration: '',
     season: '',
+    activityType: '', // Nuevo campo para almacenar el tipo de actividad seleccionado
     countries: {},
     newCountry: '',
-    imageUrl: '', // Agregamos el campo para la URL de la imagen
+    imageUrl: '', 
   });
 
   const [errors, setErrors] = useState({
@@ -18,10 +20,12 @@ const CreateActivityForm = ({ onCloseModal }) => {
     difficult: '',
     duration: '',
     season: '',
+    activityType: '', // Agregar validación para el nuevo campo
   });
 
   const [formValid, setFormValid] = useState(false);
   const [availableCountries, setAvailableCountries] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null); // Estado para almacenar la vista previa de la imagen
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -40,9 +44,17 @@ const CreateActivityForm = ({ onCloseModal }) => {
     const isValid = Object.values(errors).every(error => error === '');
     const isFilled = Object.values(formData).every(value => value !== '');
     const isCountryFilled = Object.keys(formData.countries).length > 0;
-    const isImageUrlValid = formData.imageUrl.trim() !== ''; // Validar que la URL de la imagen no esté vacía
-    setFormValid(isValid && isFilled && isCountryFilled && isImageUrlValid); // Agregar la validación de la URL de la imagen
+    const isImageUrlValid = formData.imageUrl.trim() !== '';
+    setFormValid(isValid && isFilled && isCountryFilled && isImageUrlValid);
   }, [formData, errors]);
+
+  useEffect(() => {
+    if (formData.imageUrl) {
+      setImagePreview(formData.imageUrl);
+    } else {
+      setImagePreview(null);
+    }
+  }, [formData.imageUrl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +70,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
   const addCountry = async () => {
     const { newCountry, countries } = formData;
     const lowercaseCountry = newCountry.toLowerCase();
-    const capitalizedCountry = lowercaseCountry.charAt(0).toUpperCase() + lowercaseCountry.slice(1); // Capitalizar la primera letra
+    const capitalizedCountry = lowercaseCountry.charAt(0).toUpperCase() + lowercaseCountry.slice(1); 
     if (newCountry.trim() !== '' && !countries[capitalizedCountry]) {
       if (availableCountries.includes(lowercaseCountry)) {
         setFormData({ ...formData, countries: { ...countries, [capitalizedCountry]: true }, newCountry: '' });
@@ -90,6 +102,9 @@ const CreateActivityForm = ({ onCloseModal }) => {
       case 'season':
         setErrors({ ...errors, season: validateSeason(value) });
         break;
+      case 'activityType': // Agregar validación para el nuevo campo
+        setErrors({ ...errors, activityType: validateActivityType(value) });
+        break;
       default:
         break;
     }
@@ -102,6 +117,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
       difficult: validateDifficulty(formData.difficult),
       duration: validateDuration(formData.duration),
       season: validateSeason(formData.season),
+      activityType: validateActivityType(formData.activityType), // Validar el nuevo campo
     };
 
     setErrors(formErrors);
@@ -111,14 +127,15 @@ const CreateActivityForm = ({ onCloseModal }) => {
     }
 
     try {
-      const { name, difficult, duration, season, countries, imageUrl } = formData; // Añadimos imageUrl
-      await axios.post('http://localhost:3001/activities', { name, difficult, duration, season, countries: Object.keys(countries), imageUrl }); // Pasamos imageUrl al cuerpo de la solicitud
+      const { name, difficult, duration, season, countries, imageUrl, activityType } = formData; // Añadimos activityType
+      await axios.post('http://localhost:3001/activities', { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl }); // Pasamos activityType al cuerpo de la solicitud
       alert('Actividad turística creada exitosamente');
       setFormData({
         name: '',
         difficult: '',
         duration: '',
         season: '',
+        activityType: '', // Reiniciamos activityType después de enviar la solicitud
         countries: {},
         newCountry: '',
         imageUrl: '', // Reiniciamos imageUrl después de enviar la solicitud
@@ -128,6 +145,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
         difficult: '',
         duration: '',
         season: '',
+        activityType: '', // Reiniciamos activityType después de enviar la solicitud
       });
       onCloseModal();
     } catch (error) {
@@ -135,15 +153,35 @@ const CreateActivityForm = ({ onCloseModal }) => {
       console.error(error);
     }
   };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-          e.preventDefault()
-      addCountry()
+      e.preventDefault();
+      addCountry();
     }
   };
   
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="create-activity-form" onSubmit={handleSubmit}>
+      <div>
+        {imagePreview && <img src={imagePreview} alt="Preview" style={{ maxWidth: '200px', maxHeight: '200px' }} />}
+      </div>
+      <label>
+        Tipo de Actividad: {/* Nuevo selector desplegable */}
+        <select name="activityType" value={formData.activityType} onChange={handleChange} >
+          <option value="">Seleccione un tipo de actividad</option>
+          <option value="Aventura">Aventura</option>
+          <option value="Medico">Medico</option>
+          <option value="Artístico">Artístico</option>
+          <option value="Gastronómico">Gastronómico</option>
+          <option value="Religioso">Religioso</option>
+          <option value="Negocio">Negocio</option>
+          <option value="Rural">Rural</option>
+          <option value="Lujo">Lujo</option>
+        </select>
+        <div className="error">{errors.activityType}</div>
+      </label>
+      <br/>
       <label>
         Nombre:
         <input
@@ -199,7 +237,6 @@ const CreateActivityForm = ({ onCloseModal }) => {
           name="imageUrl"
           value={formData.imageUrl}
           onChange={handleChange}
-          required
         />
       </label>
       <br />
@@ -223,7 +260,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
         </span>
       ))}
       <br />
-      <button type="submit" disabled={!Object.keys(formData.countries).length || !formData.imageUrl.trim()}>Crear Actividad Turística</button> {/* Deshabilitar el botón si no se ha ingresado la URL de la imagen */}
+      <button type="submit" disabled={!Object.keys(formData.countries).length }>Crear Actividad Turística</button>
     </form>
   );
 };

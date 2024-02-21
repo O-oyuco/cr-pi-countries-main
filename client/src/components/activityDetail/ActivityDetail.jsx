@@ -35,6 +35,8 @@ export default function ActivityDetail() {
           {activity.difficult && <p>Dificultad: {activity.difficult}</p>}
           {activity.duration && <p>Duracion: {activity.duration}</p>}
           {activity.season && <p>Temporada: {activity.season} </p>}
+          {activity.activityType && <p>Tipo de Actividad: {activity.activityType} </p>}
+          
         </div>
       </div>
     </div>

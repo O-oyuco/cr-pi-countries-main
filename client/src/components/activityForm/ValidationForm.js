@@ -20,3 +20,7 @@ export const validateName = (name) => {
     if (!season) return 'La temporada es requerida';
     return '';
   };
+  export const validateActivityType = (activityType) => {
+    if (!activityType) return 'El tipo es requerida';
+    return '';
+  };

@@ -29299,8 +29299,8 @@
                     "m": "Vénézuélien"
                 }
             },
-            "flag": "\uD83C\uDDFB\uD83C\uDDEA",
-            "maps": {
+            
+            "maps": {"flag": "\uD83C\uDDFB\uD83C\uDDEA",
                 "googleMaps": "https://goo.gl/maps/KLCwDN8sec7z2kse9",
                 "openStreetMaps": "https://www.openstreetmap.org/relation/272644"
             },

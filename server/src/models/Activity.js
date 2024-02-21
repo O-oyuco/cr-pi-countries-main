@@ -12,6 +12,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        activityType:{
+            type: DataTypes.ENUM('Aventura', 'Medico','Artístico', 'Gastronómico', 'Religioso ', 'Negocio', 'Rural', 'Lujo'),
+            allowNull:false
+        },
         difficult:{
             type: DataTypes.INTEGER,
             allowNull: false
@@ -25,8 +29,8 @@ module.exports = (sequelize) => {
             allowNull:false
         },
         imageUrl:{
-            type: DataTypes.STRING, // Cambiar al tipo de datos adecuado para la URL de la imagen
-            allowNull: false // Puedes establecerlo como true si la foto es opcional
+            type: DataTypes.TEXT, // Cambiar al tipo de datos adecuado para la URL de la imagen
+            allowNull: true // Puedes establecerlo como true si la foto es opcional
         },
     });
 };

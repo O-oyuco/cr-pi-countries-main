@@ -2,19 +2,21 @@ const { Activity, Country } = require("../db");
 
 const postActivity = async (req, res) => {
     try {
-        const { name, difficult, duration, season, countries, imageUrl } = req.body;
+        const { name, difficult, duration, season, countries, imageUrl, activityType } = req.body;
 
-        if (![name, difficult, duration, season, countries].every(Boolean)) {
+        if (![name, difficult, duration, season, countries, activityType].every(Boolean)) {
             return res.status(401).json({ message: 'Faltan datos' });
         }
 
         const [activity, created] = await Activity.findOrCreate({
-            where: { name, difficult, duration, season },
+            where: {  name, difficult, duration, season, activityType },
             defaults: {
+                name,
                 difficult,
                 duration,
                 season,
-                imageUrl, // Add imageUrl to defaults
+                imageUrl, 
+                activityType,
             }
         });
 

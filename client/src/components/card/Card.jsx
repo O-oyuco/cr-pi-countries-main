@@ -1,21 +1,16 @@
-import { Link, useLocation } from "react-router-dom";
-import { connect } from "react-redux";
+import { Link, } from "react-router-dom";
 import "./Card.css";
 
 function CardCountries({ id, name, image, continent }) {
-
-const location = useLocation();
-
-
   return (
-    <Link to={`/detail/${id}`} className="card-link">
-    <div className="card-container">
-      <div className="image-container">
-        <img className="card-image" src={image} alt={name} />
+    <Link to={`/detail/${id}`} className="card-link-home">
+    <div className="card-container-home">
+      <div className="image-container-home">
+        <img className="card-image-home" src={image} alt={name} />
       </div>
-      <div className="card-overlay">
-        <h3 className="card-name">{name}</h3>
-        <h3 className="continente-name">{continent}</h3>
+      <div className="card-overlay-home">
+        <h3 className="card-name-home">{name}</h3>
+        <h3 className="continente-name-home">{continent}</h3>
 
       </div>
       
@@ -23,22 +18,4 @@ const location = useLocation();
   </Link>
 );
 }
-
-function mapDispatchToProps(dispatch) {
-  return {
-    addFav: function (character) {
-      dispatch(addFav(character));
-    },
-    removeFav: function (id) {
-      dispatch(removeFav(id));
-    },
-  };
-}
-
-function mapStateToProps(state) {
-  return {
-    myFavorites: state.myFavorites,
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardCountries);
+export default(CardCountries);

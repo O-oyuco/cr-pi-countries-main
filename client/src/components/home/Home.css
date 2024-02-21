@@ -1,12 +1,18 @@
 .pagination-container {
+    position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: right;
+    bottom: 120px;
   }
   
   .pagination {
     display: flex;
     list-style: none;
     padding: 0;
+    position: absolute;
+    bottom: 50px;
+
+
   }
   
   .pagination li {
@@ -17,22 +23,30 @@
     text-decoration: none;
     cursor: pointer;
     border: none;
-    background-color: transparent;
+    background-color: white;
   }
   
   .pagination li.active button {
     font-weight: bold;
   }
+
+  
+  .pagination-button {
+    position: relative; /* Establece los botones de paginación como posición absoluta */
+    bottom: 90px; /* Ajusta la distancia desde la parte superior */
+    right: 27px; /* Ajusta la distancia desde la derecha */
+  }
+
   .modal {
-    display: block;
-    position: fixed;
+    display: inline;
+    top: 20%;
+    position: absolute;
     z-index: 1;
     left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
   }
   
   .modal-content {
@@ -40,7 +54,7 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 30%;
   }
   
   .close {

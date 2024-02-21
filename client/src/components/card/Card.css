@@ -1,56 +1,65 @@
 
-.card-container{
-    position: relative;
-    width: 100px; 
-    margin-bottom: 20px; 
-    margin-right: 80px; 
-    margin-top: 40px;
-    display: inline-block; 
-    z-index: 0; 
-    font-family: 'Nothing';
+.card-container-home{
+  position: relative;
+  width: 285px;
+  height: 190px; /* Ajusta según tu necesidad */
+  margin-bottom: 10px;
+  margin-right: 35px;
+  margin-top: 20px;
+  margin-left: 35px;
+  display: inline-block;
+  z-index: 0;
+  border-radius: 8px;
+  
     
   }
-  .card-overlay {
+  .card-overlay-home{
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.455);
-    padding: -10%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.478); /* Fondo semitransparente */
+    padding: 10px;
     color: #000000;
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
-    border-radius: 50px;
-    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, width 0.5s ease-in-out; /* Agregamos transición de ancho */
+    text-align: center;
+    width: 0; /* Inicialmente, el texto está oculto */
+    overflow: hidden; /* Oculta cualquier contenido que se desborde */
+    white-space: nowrap; 
     
   }
   
-  .card-link{
+  .card-link-home{
     text-decoration: none;
     color: inherit; 
     
   }
   
   
-  .card-image{
-    width: 160px;
-    height: 100px;
+  .card-image-home{
+    width:285px;
+    height: 190px;
     border-radius: 8px;
     transition: transform 0.3s ease-in-out;
 
   }
   
   
-  .card-name{
+  .card-name-home{
     margin: 1;
     background-color: rgba(210, 105, 30, 0);  
   }
-  .card-container:hover .card-image{
-    transform: scale(1.1); 
+  .card-container-home:hover .card-image-home{
+    transform: scale(1.1);
+
   }
   
-  .card-container:hover .card-overlay{
+  .card-container-home:hover .card-overlay-home{
     opacity: 1;
+    width: 294px; 
   }
-  
-  
+
+  body{
+    background-color: #000000;
+  }

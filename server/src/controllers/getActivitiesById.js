@@ -1,20 +1,21 @@
-const {Activity} = require ('../db')
+const {Activity, Country} = require ('../db');
 
 async function getActivitiesById(req, res){
     const {idActivity} = req.params;
     try{
-        const country = await Activity.findOne({
+        const activity = await Activity.findOne({
             where:{
                 id: idActivity.toUpperCase()
             },
+            include: [Country] 
         });
 
-        if (!country){
-            return res.status(404).send("No se ha encontrado algún país con ese ID...");
+        if (!activity){
+            return res.status(404).send("No se ha encontrado Actividades con ese ID...");
         }
-        return res.status(200).send(country);
+        return res.status(200).send(activity);
     }catch (error){
-        return res.status(500).send(error.message)
+        return res.status(500).send(error.message);
     }
 }
 

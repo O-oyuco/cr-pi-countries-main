@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { countriesSuccess } from "../../ridux/actions";
 import CreateActivityForm from "../activityForm/ActivityForm";
 import Filters from "../filter/Filter";
+import { Paginate } from "../pagination/Pagination";
 
 function Home(props) {
   const URL_COUNTRIES_NAME = "http://localhost:3001/countries/name/?name=";
@@ -15,13 +16,15 @@ function Home(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
   const [filterValor, setFilterValor] = useState("All")
+  const [isPaginationOpen, setIsPaginationOpen] = useState(false)
   const cardsPerPage = 10;
+  const currentCards = Paginate(filteredCountries, currentPage, cardsPerPage);
 
 
   useEffect(() => {
     setFilteredCountries(props.filteredCountries);
+    
   }, [props.filteredCountries]);
-
   const onSearch = async (name) => {
     if (filterValor === "All"){ 
       try {
@@ -49,7 +52,6 @@ function Home(props) {
     }
   };
   
-
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
     const filtered = props.filteredCountries.filter((country) =>
@@ -81,19 +83,13 @@ function Home(props) {
   };
 
 
-  // Calcular el índice de la primera y última tarjeta de la página actual
-  const indexOfLastCard = currentPage * cardsPerPage;
-  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  // Obtener las tarjetas que se mostrarán en la página actual
-  const currentCards = filteredCountries.slice(indexOfFirstCard, indexOfLastCard);
 
   return (
     <div>
       <Filters handleFilterChange= {handleFilterChange} />
       <SearchBar onSearch={onSearch} onChange={handleSearch} value={searchQuery} />
-      <Cards countries={currentCards} />
-      {/* Botón para abrir el modal */}
       <button onClick={openModal}>Agregar Actividad</button>
+      <Cards countries={currentCards} />
       {/* Modal */}
       {isModalOpen && (
         <div className="modal" onClick={handleModalClick}>
@@ -108,15 +104,20 @@ function Home(props) {
       )}
       {/* Paginación */}
       <div className="pagination-container">
-        <ul className="pagination">
-          {Array.from({ length: Math.ceil(filteredCountries.length / cardsPerPage) }).map((_, index) => (
-            <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
-                {index + 1}
-              </button>
+        <button className="pagination-button" onClick={() => setIsPaginationOpen(!isPaginationOpen)}>
+          Página {currentPage} <span className={isPaginationOpen ? "arrow-up" : "arrow-down"}></span>
+        </button>
+        {isPaginationOpen && (
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(filteredCountries.length / cardsPerPage) }).map((_, index) => (
+              <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
+                  {index + 1}
+                </button>
             </li>
           ))}
         </ul>
+        )}
       </div>
     </div>
   );

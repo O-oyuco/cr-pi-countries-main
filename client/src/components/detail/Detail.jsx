@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Detail.css';
+import { Link } from 'react-router-dom';
 
 export default function Detail() {
   const { id } = useParams();
@@ -26,6 +27,9 @@ export default function Detail() {
 
   return (
     <div>
+      <Link to="/home">
+            <button>Home</button>
+        </Link>
       <div className='detail-container-card'>
         <div className='detail-card-card'>
           <h1>{countries.name}</h1>
