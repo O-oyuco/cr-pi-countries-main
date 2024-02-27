@@ -16,7 +16,7 @@ const dispatch = useDispatch();
     difficult: '',
     duration: '',
     season: '',
-    activityType: '', // Nuevo campo para almacenar el tipo de actividad seleccionado
+    activityType: '',
     countries: {},
     newCountry: '',
     imageUrl: '', 
@@ -27,7 +27,7 @@ const dispatch = useDispatch();
     difficult: '',
     duration: '',
     season: '',
-    activityType: '', // Agregar validación para el nuevo campo
+    activityType: '',
   });
 
   const [formValid, setFormValid] = useState(false);
@@ -140,10 +140,9 @@ const dispatch = useDispatch();
     try {
       const { name, difficult, duration, season, countries, imageUrl, activityType } = formData; 
       await axios.post(URL_ACTIVITIES, { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl });
-      
-      // Despacha la acción de éxito para actualizar el estado global
-      const response = await axios.get(URL_ACTIVITIES); // Obtener todas las actividades después de agregar una nueva
-      dispatch(activitiesSuccess(response.data)); // Despachar la acción de éxito con las actividades actualizadas
+
+      const response = await axios.get(URL_ACTIVITIES); 
+      dispatch(activitiesSuccess(response.data)); 
 
       alert('Actividad turística creada exitosamente');
       setFormData({
