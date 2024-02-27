@@ -1,33 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./ActivityForm.css"
-import { useDispatch } from 'react-redux'; 
+import { useDispatch, useSelector } from 'react-redux'; 
 import { validateName, validateDifficulty, validateDuration, validateSeason, validateActivityType } from './ValidationForm.js';
 import {URL_ACTIVITIES, URL_COUNTRIES} from '../../URL.js';
-import { activitiesSuccess } from '../../ridux/actions'; 
+import { activitiesSuccess, filterActivities, countriesSuccess   } from '../../ridux/actions'; 
+
 
 
 const CreateActivityForm = ({ onCloseModal }) => {
 
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const activities = useSelector(state => state.activities);
+  const activityFilter = useSelector(state => state.activityFilter);
+  const countries = useSelector(state => state.countries);
 
   const [formData, setFormData] = useState({
-    name: '',
-    difficult: '',
-    duration: '',
-    season: '',
-    activityType: '',
-    countries: {},
-    newCountry: '',
-    imageUrl: '', 
+      name: '',
+      difficult: '',
+      duration: '',
+      season: '',
+      activityType: '',
+      countries: {},
+      newCountry: '',
+      imageUrl: '', 
   });
 
   const [errors, setErrors] = useState({
-    name: '',
-    difficult: '',
-    duration: '',
-    season: '',
-    activityType: '',
+      name: '',
+      difficult: '',
+      duration: '',
+      season: '',
+      activityType: '',
   });
 
   const [formValid, setFormValid] = useState(false);
@@ -45,80 +49,78 @@ const dispatch = useDispatch();
     };
 
     fetchCountries();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    const isValid = Object.values(errors).every(error => error === '');
-    const isFilled = Object.values(formData).every(value => value !== '');
-    const isCountryFilled = Object.keys(formData.countries).length > 0;
-    const isImageUrlValid = formData.imageUrl.trim() !== '';
-    const isActivityTypeValid = formData.activityType.trim() !== ''; // Validación para el nuevo campo
-    const isFormValid = isValid && isFilled && isCountryFilled && isImageUrlValid && isActivityTypeValid;
-    setFormValid(isFormValid);
+      const isValid = Object.values(errors).every(error => error === '');
+      const isFilled = Object.values(formData).every(value => value !== '');
+      const isCountryFilled = Object.keys(formData.countries).length > 0;
+      const isImageUrlValid = formData.imageUrl.trim() !== '';
+      const isActivityTypeValid = formData.activityType.trim() !== ''; // Validación para el nuevo campo
+      const isFormValid = isValid && isFilled && isCountryFilled && isImageUrlValid && isActivityTypeValid;
+      setFormValid(isFormValid);
   }, [formData, errors]);
-  
-  
 
   useEffect(() => {
-    if (formData.imageUrl) {
-      setImagePreview(formData.imageUrl);
-    } else {
-      setImagePreview(null);
-    }
+      if (formData.imageUrl) {
+          setImagePreview(formData.imageUrl);
+      } else {
+          setImagePreview(null);
+      }
   }, [formData.imageUrl]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    validateField(name, value);
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+      validateField(name, value);
   };
 
   const handleCountryChange = (e) => {
-    const { value } = e.target;
-    setFormData({ ...formData, newCountry: value });
+      const { value } = e.target;
+      setFormData({ ...formData, newCountry: value });
   };
 
   const addCountry = async () => {
-    const { newCountry, countries } = formData;
-    const lowercaseCountry = newCountry.toLowerCase();
-    const capitalizedCountry = lowercaseCountry.charAt(0).toUpperCase() + lowercaseCountry.slice(1); 
-    if (newCountry.trim() !== '' && !countries[capitalizedCountry]) {
-      if (availableCountries.includes(lowercaseCountry)) {
-        setFormData({ ...formData, countries: { ...countries, [capitalizedCountry]: true }, newCountry: '' });
-      } else {
-        alert("El país que intenta ingresar no existe.");
-        setFormData({ ...formData, newCountry: '' });
+      const { newCountry, countries } = formData;
+      const lowercaseCountry = newCountry.toLowerCase();
+      const capitalizedCountry = lowercaseCountry.charAt(0).toUpperCase() + lowercaseCountry.slice(1); 
+      if (newCountry.trim() !== '' && !countries[capitalizedCountry]) {
+          if (availableCountries.includes(lowercaseCountry)) {
+              setFormData({ ...formData, countries: { ...countries, [capitalizedCountry]: true }, newCountry: '' });
+          } else {
+              alert("El país que intenta ingresar no existe.");
+              setFormData({ ...formData, newCountry: '' });
+          }
       }
-    }
   };
 
   const removeCountry = (country) => {
-    const { countries } = formData;
-    const updatedCountries = { ...countries };
-    delete updatedCountries[country];
-    setFormData({ ...formData, countries: updatedCountries });
+      const { countries } = formData;
+      const updatedCountries = { ...countries };
+      delete updatedCountries[country];
+      setFormData({ ...formData, countries: updatedCountries });
   };
 
   const validateField = (name, value) => {
-    switch (name) {
-      case 'name':
-        setErrors({ ...errors, name: validateName(value) });
-        break;
-      case 'difficult':
-        setErrors({ ...errors, difficult: validateDifficulty(value) });
-        break;
-      case 'duration':
-        setErrors({ ...errors, duration: validateDuration(value) });
-        break;
-      case 'season':
-        setErrors({ ...errors, season: validateSeason(value) });
-        break;
-      case 'activityType': // Agregar validación para el nuevo campo
-        setErrors({ ...errors, activityType: validateActivityType(value) });
-        break;
-      default:
-        break;
-    }
+      switch (name) {
+          case 'name':
+              setErrors({ ...errors, name: validateName(value) });
+              break;
+          case 'difficult':
+              setErrors({ ...errors, difficult: validateDifficulty(value) });
+              break;
+          case 'duration':
+              setErrors({ ...errors, duration: validateDuration(value) });
+              break;
+          case 'season':
+              setErrors({ ...errors, season: validateSeason(value) });
+              break;
+          case 'activityType': // Agregar validación para el nuevo campo
+              setErrors({ ...errors, activityType: validateActivityType(value) });
+              break;
+          default:
+              break;
+      }
   };
 
   const handleSubmit = async (e) => {
@@ -130,20 +132,28 @@ const dispatch = useDispatch();
       season: validateSeason(formData.season),
       activityType: validateActivityType(formData.activityType), 
     };
-
+  
     setErrors(formErrors);
-
+  
     if (Object.values(formErrors).some(err => err !== '')) {
       return;
     }
-
+  
     try {
       const { name, difficult, duration, season, countries, imageUrl, activityType } = formData; 
       await axios.post(URL_ACTIVITIES, { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl });
-
+  
+      // Una vez que se crea la actividad exitosamente, actualiza el estado
       const response = await axios.get(URL_ACTIVITIES); 
       dispatch(activitiesSuccess(response.data)); 
-
+  
+      // Actualiza los países solo después de haber creado la actividad
+      const countriesResponse = await axios.get(URL_COUNTRIES);
+      dispatch(countriesSuccess(countriesResponse.data));
+      
+      // Actualiza los filtros de actividad
+      dispatch(filterActivities(activityFilter));
+      
       alert('Actividad turística creada exitosamente');
       setFormData({
         name: '',
@@ -168,12 +178,12 @@ const dispatch = useDispatch();
       console.error(error);
     }
   };
-
+  
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addCountry();
-    }
+      if (e.key === 'Enter') {
+          e.preventDefault();
+          addCountry();
+      }
   };
   
   return (

@@ -1,12 +1,16 @@
 import { COUNTRIES_SUCCESS, ACTIVITIES_SUCCESS, COUNTRIES_FILTER, ACTIVITIES_FILTER, COUNTRIES_ORDER } from "./actions";
 
+
+const storedFilter = localStorage.getItem('filter');
+const storedActivityFilter = localStorage.getItem('activityFilter');
 const initialState = {
   countries: [],
   allCountries: [],
   activities: [],
   allActivities: [],
-  filter: 'All',
-  activityFilter: 'All', // Nuevo estado para el filtro de actividades
+  filter: storedFilter ? storedFilter : 'All',
+  activityFilter: storedActivityFilter ? storedActivityFilter : 'All',
+
   order: 'N'
 };
 
@@ -26,18 +30,20 @@ const countriesReducer = (state = initialState, action) => {
         activities: action.payload,
         allActivities: action.payload,
       };
-    case COUNTRIES_FILTER:
-      return {
-        ...state,
-        filter: action.payload,
-        countries: filtroCountries(state.allCountries, action.payload, state.activityFilter, state.order), // Ahora incluye también el filtro de actividad
+      case COUNTRIES_FILTER:
+        localStorage.setItem('filter', action.payload); // Guardar filtro en almacenamiento local
+        return {
+          ...state,
+          filter: action.payload,
+          countries: filtroCountries(state.allCountries, action.payload, state.activityFilter, state.order),
       };
-    case ACTIVITIES_FILTER:
-      return {
-        ...state,
-        activityFilter: action.payload,
-        countries: filtroCountries(state.allCountries, state.filter, action.payload, state.order), // Ahora incluye también el filtro de actividad
-      };
+      case ACTIVITIES_FILTER:
+          localStorage.setItem('activityFilter', action.payload); // Guardar filtro de actividad en almacenamiento local
+          return {
+            ...state,
+            activityFilter: action.payload,
+            countries: filtroCountries(state.allCountries, state.filter, action.payload, state.order),
+          };
     case COUNTRIES_ORDER:
       return {
         ...state,

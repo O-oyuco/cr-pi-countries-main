@@ -97,8 +97,8 @@ export default function Detail() {
             />
           </div>
         )}
-        <button className= 'modalActi' onClick={openModal} ><i class="fas fa-eye" aria-hidden="true"></i></button>
-        <button className= 'modalActi2' onClick={openFormModal} ><i class="fas fa-file" aria-hidden="true" > </i></button>
+        <button className= 'modalActi' onClick={openModal} ><i className="fas fa-eye" aria-hidden="true"></i></button>
+        <button className= 'modalActi2' onClick={openFormModal} ><i className ="fas fa-file" aria-hidden="true" > </i></button>
         {modalOpen && (
           <div className="modal-detail">
             <span className="closeA" onClick={closeModal}>&times;</span>
