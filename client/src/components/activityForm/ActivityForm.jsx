@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./ActivityForm.css"
+import { useDispatch } from 'react-redux'; 
 import { validateName, validateDifficulty, validateDuration, validateSeason, validateActivityType } from './ValidationForm.js';
 import {URL_ACTIVITIES, URL_COUNTRIES} from '../../URL.js';
+import { activitiesSuccess } from '../../ridux/actions'; 
+
+
 const CreateActivityForm = ({ onCloseModal }) => {
+
+const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -26,7 +32,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
 
   const [formValid, setFormValid] = useState(false);
   const [availableCountries, setAvailableCountries] = useState([]);
-  const [imagePreview, setImagePreview] = useState(null); // Estado para almacenar la vista previa de la imagen
+  const [imagePreview, setImagePreview] = useState(null); 
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -46,8 +52,12 @@ const CreateActivityForm = ({ onCloseModal }) => {
     const isFilled = Object.values(formData).every(value => value !== '');
     const isCountryFilled = Object.keys(formData.countries).length > 0;
     const isImageUrlValid = formData.imageUrl.trim() !== '';
-    setFormValid(isValid && isFilled && isCountryFilled && isImageUrlValid);
+    const isActivityTypeValid = formData.activityType.trim() !== ''; // Validación para el nuevo campo
+    const isFormValid = isValid && isFilled && isCountryFilled && isImageUrlValid && isActivityTypeValid;
+    setFormValid(isFormValid);
   }, [formData, errors]);
+  
+  
 
   useEffect(() => {
     if (formData.imageUrl) {
@@ -118,7 +128,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
       difficult: validateDifficulty(formData.difficult),
       duration: validateDuration(formData.duration),
       season: validateSeason(formData.season),
-      activityType: validateActivityType(formData.activityType), // Validar el nuevo campo
+      activityType: validateActivityType(formData.activityType), 
     };
 
     setErrors(formErrors);
@@ -128,25 +138,30 @@ const CreateActivityForm = ({ onCloseModal }) => {
     }
 
     try {
-      const { name, difficult, duration, season, countries, imageUrl, activityType } = formData; // Añadimos activityType
-      await axios.post(URL_ACTIVITIES, { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl }); // Pasamos activityType al cuerpo de la solicitud
+      const { name, difficult, duration, season, countries, imageUrl, activityType } = formData; 
+      await axios.post(URL_ACTIVITIES, { name, difficult, duration, season, activityType, countries: Object.keys(countries), imageUrl });
+      
+      // Despacha la acción de éxito para actualizar el estado global
+      const response = await axios.get(URL_ACTIVITIES); // Obtener todas las actividades después de agregar una nueva
+      dispatch(activitiesSuccess(response.data)); // Despachar la acción de éxito con las actividades actualizadas
+
       alert('Actividad turística creada exitosamente');
       setFormData({
         name: '',
         difficult: '',
         duration: '',
         season: '',
-        activityType: '', // Reiniciamos activityType después de enviar la solicitud
+        activityType: '', 
         countries: {},
         newCountry: '',
-        imageUrl: '', // Reiniciamos imageUrl después de enviar la solicitud
+        imageUrl: '', 
       });
       setErrors({
         name: '',
         difficult: '',
         duration: '',
         season: '',
-        activityType: '', // Reiniciamos activityType después de enviar la solicitud
+        activityType: '', 
       });
       onCloseModal();
     } catch (error) {
@@ -163,107 +178,111 @@ const CreateActivityForm = ({ onCloseModal }) => {
   };
   
   return (
-    <form className="create-activity-form" onSubmit={handleSubmit}>
-      <div>
-        {imagePreview && <img src={imagePreview} alt="Preview" style={{ maxWidth: '200px', maxHeight: '200px' }} />}
-      </div>
-      <label>
-        Tipo de Actividad: {/* Nuevo selector desplegable */}
-        <select name="activityType" value={formData.activityType} onChange={handleChange} >
-          <option value="">Seleccione un tipo de actividad</option>
-          <option value="Aventura">Aventura</option>
-          <option value="Medico">Medico</option>
-          <option value="Artístico">Artístico</option>
-          <option value="Gastronómico">Gastronómico</option>
-          <option value="Religioso">Religioso</option>
-          <option value="Negocio">Negocio</option>
-          <option value="Rural">Rural</option>
-          <option value="Lujo">Lujo</option>
-        </select>
-        <div className="error">{errors.activityType}</div>
-      </label>
-      <br/>
-      <label>
-        Nombre:
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <div className="error">{errors.name}</div>
-      </label>
-      <br />
-      <label>
-        Dificultad:
-        <input
-          type="text"
-          name="difficult"
-          value={formData.difficult}
-          onChange={handleChange}
-          required
-        />
-        <div className="error">{errors.difficult}</div>
-      </label>
-      <br />
-      <label>
-        Duración:
-        <input
-          type="text"
-          name="duration"
-          value={formData.duration}
-          onChange={handleChange}
-          required
-        />
-        <div className="error">{errors.duration}</div>
-      </label>
-      <br />
-      <label>
-        Temporada:
-        <select name="season" value={formData.season} onChange={handleChange} required>
-          <option value="">Seleccione una temporada</option>
-          <option value="Invierno">Invierno</option>
-          <option value="Primavera">Primavera</option>
-          <option value="Verano">Verano</option>
-          <option value="Otoño">Otoño</option>
-        </select>
-        <div className="error">{errors.season}</div>
-      </label>
-      <br />
-      <label>
-        URL de la imagen:
-        <input
-          type="text"
-          name="imageUrl"
-          value={formData.imageUrl}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Países:
-        <input
-          type="text"
-          name="countries"
-          value={formData.newCountry}
-          onChange={handleCountryChange}
-          onKeyDown={handleKeyDown}
-        />
-        <button type="button" onClick={addCountry}>Agregar País</button>
-      </label>
-      <br />
-      {Object.keys(formData.countries).map((country, index) => (
-        <span key={index}>
-          {country}{' '}
-          <button type="button" onClick={() => removeCountry(country)}>Eliminar</button>
-          {index < Object.keys(formData.countries).length - 1 && ', '}
-        </span>
-      ))}
-      <br />
-      <button type="submit" disabled={!Object.keys(formData.countries).length }>Crear Actividad Turística</button>
-    </form>
+<form className="create-activity-form" onSubmit={handleSubmit}>
+  <div className="form-column">
+    <label>
+      Nombre:
+      <input
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+      />
+      <div className="error">{errors.name}</div>
+    </label>
+    <label>
+      Dificultad:
+      <input
+        type="text"
+        name="difficult"
+        value={formData.difficult}
+        onChange={handleChange}
+        required
+      />
+      <div className="error">{errors.difficult}</div>
+    </label>
+    <label>
+      Duración:
+      <input
+        type="text"
+        name="duration"
+        value={formData.duration}
+        onChange={handleChange}
+        required
+      />
+      <div className="error">{errors.duration}</div>
+    </label>
+    <label>
+      URL de la imagen:
+      <input
+        type="text"
+        name="imageUrl"
+        value={formData.imageUrl}
+        onChange={handleChange}
+      />
+    </label>
+    {imagePreview && (
+    <div className="form-column">
+      <img src={imagePreview} alt="Preview" />
+    </div>
+  )}
+  </div>
+  <div className="form-column">
+    <label>
+      Temporada:
+      <select name="season" value={formData.season} onChange={handleChange} required>
+        <option value="">Seleccione una temporada</option>
+        <option value="Invierno">Invierno</option>
+        <option value="Primavera">Primavera</option>
+        <option value="Verano">Verano</option>
+        <option value="Otoño">Otoño</option>
+      </select>
+      <div className="error">{errors.season}</div>
+    </label>
+    <label>
+      Tipo de Actividad: 
+      <select name="activityType" value={formData.activityType} onChange={handleChange} >
+        <option value="">Seleccione un tipo de actividad</option>
+        <option value="Aventura">Aventura</option>
+        <option value="Medico">Medico</option>
+        <option value="Artístico">Artístico</option>
+        <option value="Gastronómico">Gastronómico</option>
+        <option value="Religioso">Religioso</option>
+        <option value="Negocio">Negocio</option>
+        <option value="Rural">Rural</option>
+        <option value="Lujo">Lujo</option>
+      </select>
+      <div className="error">{errors.activityType}</div>
+    </label>
+    
+    <label>
+      Países:
+      <input
+        type="text"
+        name="countries"
+        value={formData.newCountry}
+        onChange={handleCountryChange}
+        onKeyDown={handleKeyDown}
+      />
+      <button type="button" onClick={addCountry}>Agregar País</button>
+      <ul>
+        {Object.keys(formData.countries).map((country, index) => (
+          <li key={index}>
+            {country}{' '}
+            <button type="button" onClick={() => removeCountry(country)}>x</button>
+          </li>
+        ))}
+      </ul>
+    </label>
+  </div>
+
+  <div className="form-column">
+    <button type="submit" disabled={!Object.keys(formData.countries).length }>Crear Actividad Turística</button>
+  </div>
+</form>
+
   );
 };
-
+ 
 export default CreateActivityForm;

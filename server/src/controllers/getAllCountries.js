@@ -1,8 +1,10 @@
-const {Country} = require("../db")
+const {Country, Activity} = require("../db");
 
 async function getAllCountries(req, res){
     try{
-        const countries = await Country.findAll();
+        const countries = await Country.findAll({
+            include: [Activity]
+        });
         return res.status(200).json(countries);
     }catch (error){
         console.error("Error fetching countries:", error);

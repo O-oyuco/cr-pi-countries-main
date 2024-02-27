@@ -1,19 +1,30 @@
 import React from 'react';
-import CreateActivityForm from '../activityForm/ActivityForm';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { countriesSuccess } from '../../ridux/actions';
+import axios from 'axios';
+import {URL_ACTIVITIES} from '../../URL';
 
-const ActivityPage = () => {
-  const handleCreateActivity = (activityData) => {
-    // Lógica para enviar los datos del formulario al servidor
-    console.log('Actividad creada:', activityData);
+function Landing({ countriesSuccess }) {
+  const handleIngresarClick = async () => {
+    try {
+      const response = await axios.get(URL_ACTIVITIES);
+      countriesSuccess(response.data);
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
   };
 
   return (
     <div>
-      <h1>FORM PAGE</h1>
-      <h2>Crear Actividad Turística</h2>
-      <CreateActivityForm onCreateActivity={handleCreateActivity} />
+      <div className="app-background1"></div>
+       <div>
+       <Link to="/home" className="titulo-landing" onClick={handleIngresarClick} >
+        Bienvenidos a la aplicación de paises <i class="fa fa-heart" ></i>
+      </Link >
     </div>
+   </div>
   );
-};
+}
 
-export default ActivityPage;
+export default connect(null, { countriesSuccess })(Landing);

@@ -29,8 +29,8 @@ module.exports = (sequelize) => {
             allowNull:false
         },
         imageUrl:{
-            type: DataTypes.TEXT, // Cambiar al tipo de datos adecuado para la URL de la imagen
-            allowNull: true // Puedes establecerlo como true si la foto es opcional
+            type: DataTypes.TEXT, 
+            allowNull: true 
         },
     });
 };

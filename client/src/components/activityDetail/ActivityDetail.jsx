@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { URL_ACTIVITIES } from '../../URL';
-// import './Detail.css';
 
 export default function ActivityDetail() {
   const { id } = useParams();
@@ -28,7 +27,7 @@ export default function ActivityDetail() {
       <div className='detail-container-card'>
         <div className='detail-card-card'>
           <h1>{activity.name}</h1>
-          <img src={activity.imageUrl} alt={activity.name} />
+          <img src={activity.imageUrl} className= 'foto-detail' alt={activity.name} />
           {activity.id && <p>ID: {activity.id}</p>}
           {activity.name && <p>Nombre: {activity.name}</p>}
           {activity.difficult && <p>Dificultad: {activity.difficult}</p>}

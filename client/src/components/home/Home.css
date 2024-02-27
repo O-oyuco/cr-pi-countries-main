@@ -2,7 +2,8 @@
     position: relative;
     display: flex;
     justify-content: right;
-    bottom: 120px;
+    bottom: 110px;
+    z-index: 1;
   }
   
   .pagination {
@@ -11,8 +12,6 @@
     padding: 0;
     position: absolute;
     bottom: 50px;
-
-
   }
   
   .pagination li {
@@ -23,7 +22,9 @@
     text-decoration: none;
     cursor: pointer;
     border: none;
-    background-color: white;
+    background-color: rgb(240, 240, 240);
+    font-family: 'Century Gothic', sans-serif;
+    border-radius: 5px;
   }
   
   .pagination li.active button {
@@ -32,31 +33,49 @@
 
   
   .pagination-button {
-    position: relative; /* Establece los botones de paginación como posición absoluta */
-    bottom: 90px; /* Ajusta la distancia desde la parte superior */
-    right: 27px; /* Ajusta la distancia desde la derecha */
+    position: relative; 
+    bottom: 90px; 
+    background-color: #000000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    transition:0.5s ease-in-out;
+    border-radius: 5px;
+  }
+
+  .pagination-button :hover{
+    transform: scale(1.1);
   }
 
   .modal {
     display: inline;
-    top: 20%;
+    top: 0;
     position: absolute;
     z-index: 1;
     left: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.545);
   }
   
   .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    background-color: #fefefe00;
+    margin: auto;
     padding: 20px;
-    border: 1px solid #888;
-    width: 30%;
+    border: 1px solid #88888800;
+    width: 35%;
+    height: 80%;
+    font-size: 70%;
   }
   
+
+  h2{
+    font-size: 20px;
+    text-align: center;
+  }
   .close {
     color: #aaa;
     float: right;
@@ -71,3 +90,64 @@
     cursor: pointer;
   }
   
+  .app-background1 {
+    background-image: url('http://www.gisandbeers.com/wp-content/uploads/2016/04/Night-Earth.jpg');
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: -2;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center; 
+}
+  .app-background2{
+    background-image: url('https://static.vecteezy.com/system/resources/previews/006/180/775/non_2x/world-map-silhouette-illustration-vector.jpg');
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: -2;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center; 
+}
+
+.titulo-landing{
+  position: absolute;
+  color: aliceblue;
+  font-family: "Kings", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 60px;
+  left: 330px;
+  top: 350px;
+  text-shadow: 5px 4px 6px rgb(0, 0, 0);
+  transition:0.5s ease-in-out;
+}
+
+.titulo-landing:hover{
+  transition: scale(1.2);
+  text-shadow: 5px 4px 6px rgb(4, 8, 255);
+}
+
+.modal-content h2{
+  color: rgb(0, 6, 10);
+  font-family: "Kings", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
+  text-shadow: 5px 4px 6px rgb(223, 222, 222);
+}
+
+button{
+  font-family: 'Century Gothic', sans-serif;
+}
+
+select{
+   font-family: 'Century Gothic', sans-serif;
+}

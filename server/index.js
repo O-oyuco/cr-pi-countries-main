@@ -1,8 +1,8 @@
 const axios = require("axios");
 const server = require("./src/server");
 const { conn } = require('./src/db.js');
-// const PORT = 3001;
-const PORT = 5432;
+const PORT = 3001;
+// const PORT = 5432;
 const createCountries = require('./createCountries.js');
 
 conn.sync({ force: true }).then(async() => {

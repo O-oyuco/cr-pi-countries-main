@@ -1,0 +1,27 @@
+
+  .select-container select {
+    padding: 8px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: aliceblue;
+  }
+  
+  .select-container select:focus {
+    outline: none;
+    border-color: #000000;
+  }
+  
+.select-container button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .select-container button:hover {
+    background-color: #000000;
+  }

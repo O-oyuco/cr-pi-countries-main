@@ -1,4 +1,4 @@
-const {Country} = require ('../db')
+const {Country, Activity} = require ('../db')
 
 async function getCountriesById(req, res){
     const {idPais} = req.params;
@@ -7,6 +7,7 @@ async function getCountriesById(req, res){
             where:{
                 id: idPais.toUpperCase()
             },
+            include: [Activity]
         });
 
         if (!country){

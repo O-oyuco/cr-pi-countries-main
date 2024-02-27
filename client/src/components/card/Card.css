@@ -1,48 +1,43 @@
 
 .card-container-home{
   position: relative;
-  width: 285px;
-  height: 190px; /* Ajusta según tu necesidad */
+  width: 282px;
+  height: 190px; 
   margin-bottom: 10px;
   margin-right: 35px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 35px;
   display: inline-block;
-  z-index: 0;
-  border-radius: 8px;
-  
-    
+  z-index: 1;
+  border-radius: 8px; 
   }
   .card-overlay-home{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.478); /* Fondo semitransparente */
+    background-color: rgba(255, 255, 255, 0.478); 
     padding: 10px;
     color: #000000;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, width 0.5s ease-in-out; /* Agregamos transición de ancho */
+    transition: opacity 0.3s ease-in-out, width 0.5s ease-in-out; 
     text-align: center;
-    width: 0; /* Inicialmente, el texto está oculto */
-    overflow: hidden; /* Oculta cualquier contenido que se desborde */
-    white-space: nowrap; 
-    
+    width: 0; 
+    overflow: hidden;
+    white-space: nowrap;  
   }
   
   .card-link-home{
     text-decoration: none;
     color: inherit; 
-    
   }
   
   
   .card-image-home{
-    width:285px;
+    width:282px;
     height: 190px;
     border-radius: 8px;
     transition: transform 0.3s ease-in-out;
-
   }
   
   
@@ -50,16 +45,13 @@
     margin: 1;
     background-color: rgba(210, 105, 30, 0);  
   }
+
   .card-container-home:hover .card-image-home{
     transform: scale(1.1);
-
   }
   
+
   .card-container-home:hover .card-overlay-home{
     opacity: 1;
-    width: 294px; 
-  }
-
-  body{
-    background-color: #000000;
+    width: 291px; 
   }

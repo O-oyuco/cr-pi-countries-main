@@ -1,10 +1,12 @@
 .create-activity-form {
-    max-width: 350px;
+    max-width: 450px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    font-size: 17px;
   }
   
   .create-activity-form label {
@@ -14,8 +16,8 @@
   
   .create-activity-form input,
   .create-activity-form select {
-    width: 100%;
-    padding: 8px;
+    width: 200px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -25,20 +27,58 @@
   
   .create-activity-form .error {
     color: red;
-    font-size: 12px;
+    font-size: 14px;
+    text-align: center;
   }
   
   .create-activity-form button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #000000;
     margin-bottom: 3px;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    transition:0.5s ease-in-out;
   }
   
   .create-activity-form button:hover {
-    background-color: #0056b3;
+    transition:0.5s ease-in-out;
+    background-color: rgb(240, 240, 240);
   }
   
+
+  .create-activity-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-column {
+  width: 45%; 
+}
+
+.form-column label,
+.form-column select,
+.form-column input {
+  display: block;
+  margin-bottom: 10px; 
+}
+
+.form-column img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.create-activity-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+body{
+  background-color: black;
+}
+.foto-detail{
+  top: 0;
+  height: 300px;
+  
+}

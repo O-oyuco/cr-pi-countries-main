@@ -5,15 +5,17 @@ export default function SearchBar(props) {
 
   const handleChange = (evento) => {
     const inputValue = evento.target.value;
-    // Validar el valor del input utilizando una expresión regular
     if (/^[a-zA-Z\s]*$/.test(inputValue)) {
       setName(inputValue);
       props.onSearch(inputValue);
+    } else {
+      setName('');
     }
-  }
+  };
+
   return (
     <div className="searchBar">
-      <input type="text" onChange={handleChange} placeholder="Ingrese el nombre del pais" value={name} />
+      <input type="text" onChange={handleChange} placeholder="Ingrese el nombre del país" value={name} />
     </div>
   );
 }
