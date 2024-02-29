@@ -24,6 +24,6 @@
     return '';
   };
   export const validateActivityType = (activityType) => {
-    if (!activityType) return 'El tipo es requerida';
+    if (!activityType) return 'El tipo de actividad es requerida, porfavor seleccione alguna.';
     return '';
   };

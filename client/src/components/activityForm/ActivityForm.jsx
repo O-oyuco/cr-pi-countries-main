@@ -52,14 +52,17 @@ const CreateActivityForm = ({ onCloseModal }) => {
   }, [dispatch]);
 
   useEffect(() => {
-      const isValid = Object.values(errors).every(error => error === '');
-      const isFilled = Object.values(formData).every(value => value !== '');
-      const isCountryFilled = Object.keys(formData.countries).length > 0;
-      const isImageUrlValid = formData.imageUrl.trim() !== '';
-      const isActivityTypeValid = formData.activityType.trim() !== ''; // Validación para el nuevo campo
-      const isFormValid = isValid && isFilled && isCountryFilled && isImageUrlValid && isActivityTypeValid;
-      setFormValid(isFormValid);
-  }, [formData, errors]);
+    const isNameValid = validateName(formData.name) === '';
+    const isDifficultyValid = validateDifficulty(formData.difficult) === '';
+    const isDurationValid = validateDuration(formData.duration) === '';
+    const isSeasonValid = formData.season.trim() !== '';
+    const isActivityTypeValid = formData.activityType.trim() !== '';
+    const isCountryValid = Object.keys(formData.countries).length > 0;
+
+    const isFormValid = isNameValid && isDifficultyValid && isDurationValid && isSeasonValid && isActivityTypeValid && isCountryValid;
+    
+    setFormValid(isFormValid);
+}, [formData]);
 
   useEffect(() => {
       if (formData.imageUrl) {
@@ -81,18 +84,19 @@ const CreateActivityForm = ({ onCloseModal }) => {
   };
 
   const addCountry = async () => {
-      const { newCountry, countries } = formData;
-      const lowercaseCountry = newCountry.toLowerCase();
-      const capitalizedCountry = lowercaseCountry.charAt(0).toUpperCase() + lowercaseCountry.slice(1); 
-      if (newCountry.trim() !== '' && !countries[capitalizedCountry]) {
-          if (availableCountries.includes(lowercaseCountry)) {
-              setFormData({ ...formData, countries: { ...countries, [capitalizedCountry]: true }, newCountry: '' });
-          } else {
-              alert("El país que intenta ingresar no existe.");
-              setFormData({ ...formData, newCountry: '' });
-          }
-      }
-  };
+    const { newCountry, countries } = formData;
+    const capitalizedCountry = newCountry
+        .toLowerCase()
+        .replace(/\b(?!(?:of|the|and)\b)\w/g, c => c.toUpperCase());
+    if (newCountry.trim() !== '' && !countries[capitalizedCountry]) {
+        if (availableCountries.includes(newCountry.toLowerCase())) {
+            setFormData({ ...formData, countries: { ...countries, [capitalizedCountry]: true }, newCountry: '' });
+        } else {
+            alert("El país que intenta ingresar no existe.");
+            setFormData({ ...formData, newCountry: '' });
+        }
+    }
+};
 
   const removeCountry = (country) => {
       const { countries } = formData;
@@ -212,7 +216,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
       <div className="error">{errors.difficult}</div>
     </label>
     <label>
-      Duración:
+      Duración: (En horas)
       <input
         type="text"
         name="duration"
@@ -287,7 +291,7 @@ const CreateActivityForm = ({ onCloseModal }) => {
   </div>
 
   <div className="form-column">
-    <button type="submit" disabled={!Object.keys(formData.countries).length }>Crear Actividad Turística</button>
+  <button type="submit" disabled={!formValid}>Crear Actividad Turística</button>
   </div>
 </form>
 

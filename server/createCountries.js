@@ -56,16 +56,6 @@ async function createCountries(){
             //     code,
             //     name,
             // })) : [];
-            // const countryTimezones = timezones ? Object.entries(timezones).map(([code, name]) => ({
-            //     code,
-            //     name,
-            // })) : [];
-            // const countryBorders = borders ? Object.entries(borders).map(([code, name]) => ({
-            //     code,
-            //     name,
-            // })) : [];
-
-
 
             await Country.create({
                 id,

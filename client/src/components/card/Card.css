@@ -1,12 +1,12 @@
 
 .card-container-home{
   position: relative;
-  width: 282px;
+  width: 252px;
   height: 190px; 
   margin-bottom: 10px;
   margin-right: 35px;
   margin-top: 10px;
-  margin-left: 35px;
+  margin-left: 40px;
   display: inline-block;
   z-index: 1;
   border-radius: 8px; 
@@ -14,10 +14,10 @@
   .card-overlay-home{
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 56%;
     transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, 0.478); 
-    padding: 10px;
+    padding: 15px;
     color: #000000;
     opacity: 0;
     transition: opacity 0.3s ease-in-out, width 0.5s ease-in-out; 
@@ -53,5 +53,5 @@
 
   .card-container-home:hover .card-overlay-home{
     opacity: 1;
-    width: 291px; 
+    width: 280px; 
   }

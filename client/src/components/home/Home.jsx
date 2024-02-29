@@ -11,6 +11,7 @@ import NavS from "../nav/Nav";
 
 
 function Home(props) {
+  
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,41 +20,46 @@ function Home(props) {
   const [isPaginationOpen, setIsPaginationOpen] = useState(false)
   const cardsPerPage = 10;
   const currentCards = Paginate(filteredCountries, currentPage, cardsPerPage);
+  const nPage = Math.ceil(filteredCountries.length /cardsPerPage);
 
-
+  useEffect(() => {
+    setCurrentPage(1); 
+  }, [filteredCountries]);
+  
   useEffect(() => {
     setFilteredCountries(props.filteredCountries);
     
   }, [props.filteredCountries]);
-const onSearch = async (name) => {
-  if (filterValor === "All"){ 
-    try {
-      const { data } = await axios.get(`${URL_COUNTRIES_NAME}${name}`);
-      if (data.length > 0) {
-        setFilteredCountries(data);
-        setCurrentPage(1); 
+  
+  const onSearch = async (name) => {
+    if (filterValor === "All"){ 
+      try {
+        const { data } = await axios.get(`${URL_COUNTRIES_NAME}${name}`);
+        if (data.length > 0) {
+          setFilteredCountries(data);
+          setCurrentPage(1); 
+        } else {
+          alert("No hay países con ese nombre.");
+          setSearchQuery(""); 
+          setFilteredCountries(props.filteredCountries); 
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    } else {
+      const filterCountries = props.filteredCountries.filter(country =>
+        country.name.toLowerCase().includes(name.toLowerCase())
+      );
+      if (filterCountries.length > 0) {
+        setFilteredCountries(filterCountries);
+        setCurrentPage(1);
       } else {
-        alert("No hay países con ese nombre.");
+        alert('No hay países con ese nombre');
         setSearchQuery(""); 
         setFilteredCountries(props.filteredCountries); 
       }
-    } catch (err) {
-      alert(err.message);
     }
-  } else {
-    const filterCountries = props.filteredCountries.filter(country =>
-      country.name.toLowerCase().includes(name.toLowerCase())
-    );
-    if (filterCountries.length > 0) {
-      setFilteredCountries(filterCountries);
-      setCurrentPage(1);
-    } else {
-      alert('No hay países con ese nombre');
-      setSearchQuery(""); 
-      setFilteredCountries(props.filteredCountries); 
-    }
-  }
-};
+  };
 
 
   const handleSearch = (event) => {
@@ -87,6 +93,16 @@ const onSearch = async (name) => {
     setIsModalOpen(false);
   };
 
+  const nextPage = () => {
+    if(currentPage !== nPage )
+        setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if(currentPage !== 1) 
+        setCurrentPage(currentPage - 1);
+  };
+
   return (
     <div>
       <NavS
@@ -116,6 +132,9 @@ const onSearch = async (name) => {
       </button>
       {isPaginationOpen && (
         <ul className="pagination">
+          <li className="page-item">
+        <button className="page-link" onClick={prevPage}>Prev</button>
+          </li>
           {Array.from({ length: Math.ceil(filteredCountries.length / cardsPerPage) }).map((_, index) => (
             <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
               <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
@@ -123,6 +142,9 @@ const onSearch = async (name) => {
               </button>
             </li>
           ))}
+          <li className="page-item">
+          <button className="page-link" onClick={nextPage}>Next</button>
+          </li>
         </ul>
       )}
     </div>

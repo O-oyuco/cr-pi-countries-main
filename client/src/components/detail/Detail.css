@@ -101,19 +101,19 @@ p{
   position: relative;
   display: flex;
   top: 75px;
-  width:450px;
+  width:430px;
   height: 280px;
-  left: 20px;
+  left: 30px;
   grid-column: 1/2;
   border-radius: 10px;
 }
 
 .escudo{
   position: relative;
-  width:300px;
-  height: 300px;
+  width:280px;
+  height: 280px;
   top: 75px;
-  left: 90px;
+  left: 100px;
   display:flex;
 }
 
@@ -122,8 +122,8 @@ p{
   grid-column: 3/3;
   top: 75px;
   width: 350px;
-  height: 300px;
-  left: 70px;
+  height: 280px;
+  left: 60px;
   border-radius: 10px;
 }
 
@@ -160,7 +160,7 @@ a {
   grid-column: 3/3;
   width: 50px;
   right: 133px;
-  bottom: 680px;
+  bottom: 550px;
   z-index: 1;
   background-color: transparent;
   color: rgb(0, 0, 0); 
@@ -176,7 +176,7 @@ a {
   grid-column: 3/3;
   width: 50px;
   right: 80px;
-  bottom: 680px;
+  bottom: 550px;
   z-index: 1;
   color: #c900;
   color: rgb(0, 0, 0); 
